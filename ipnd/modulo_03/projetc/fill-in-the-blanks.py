@@ -1,5 +1,8 @@
 # coding=utf-8
+
 LIVES = 5
+
+LEVEL_LIST = ['fácil','médio','difícil']
 
 # PHRASES e LIST_OF_ANSWERS sao relacionadas pelo indice da lista.
 # Ou seja, LIST_OF_ANSWERS[0] contém as respostas de PHRASES[0]
@@ -38,15 +41,8 @@ def init(lives):
     return lives,hits
 
 # Retorna o indice de uma frase baseado na dificuldade
-def select_phrase_index(level):
-    if (level == 'fácil'):
-        return 0
-    elif (level == 'médio'):
-        return 1
-    elif (level == 'difícil'):
-        return 2
-    # TODO: lancar uma exception caso nome nao suportado
-    return None
+def select_phrase_index(level, level_list):
+    return level_list.index(level)
 
 # Retorna uma lista com todas as chaves de substituicao (e.g., ___1___)
 # encontradas para uma determinada frase
@@ -62,7 +58,7 @@ def get_replacement_keys(index, list_of_answers):
 # determinada pergunta
 def check_answer(answer, key, list_of_answer):
     for la in list_of_answer:
-        if la[0] == key and la[1] == answer:
+        if la[0] == key and la[1].lower() == answer.lower():
             return True
     return False
 
@@ -78,10 +74,12 @@ def result(hits,max_hits):
         return "Você não conseguiu acertar todos os desafios! Revise o conteúdo!"
 
 # Jogo em si, captura as informações do usuário e implementa as regras
-def play_game(lives,phrases,list_of_answers):
+def play_game(lives,phrases,list_of_answers,level_list):
     lives,hits = init(LIVES)
-    level = raw_input("Selecione o nivel de dificuldade: ")
-    index = select_phrase_index(level)
+    level = ""
+    while level not in level_list:
+        level = raw_input("Selecione o nivel de dificuldade: ")
+    index = select_phrase_index(level,level_list)
     phrase = phrases[index]
     print phrase
     keys = get_replacement_keys(index, list_of_answers)
@@ -98,4 +96,4 @@ def play_game(lives,phrases,list_of_answers):
             hits += 1
     print result(hits,max_hits)
 
-play_game(LIVES,PHRASES,LIST_OF_ANSWERS)
+play_game(LIVES,PHRASES,LIST_OF_ANSWERS,LEVEL_LIST)
