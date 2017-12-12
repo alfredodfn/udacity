@@ -4,19 +4,25 @@ LIVES = 5
 # PHRASES e LIST_OF_ANSWERS sao relacionadas pelo indice da lista.
 # Ou seja, LIST_OF_ANSWERS[0] contém as respostas de PHRASES[0]
 PHRASES = [
-    "Essa eh ___1___ a primeira ___2___ frase ___3___ e ___4___",
-    "Essa eh a segunda frase",
-    "Essa eh a terceira frase",
+    "A ___1___ (World Wide Web) é uma coleção de documentos ___2___ " +
+    "(HyperText Markup Language), o principal tipo de documento que nela pode " +
+    "ser contido. Entretanto, diversos outros tipos de arquivos são suportados: " +
+    "___3___, vídeos, músicas, textos planos, entre outros. A comunicação entre " +
+    "esses documentos é realizada por meio de ___4___.",
+
+    "A Web é composta pelo ___1___ (você, seu computador e um navegador), a ___2___ e os ___3___es que armazenam os documentos HTML. O ___1___, através do ___4___, interage com o ___3___ por meio do protocolo HTTP (Hypertext Transfer Protocol), requisitando os documentos HTML e demais tipos associados.",
+
+    "O ___1___ modifica o HTML alterando diretamente o elemento ou através de ___2___es. Os ___2___es são os nomes utilizados para filtrar os elementos atribuídos a uma ___3___ ou atributo de ___4___ (ID)."
 ]
 
 # Par identificador <-> valor que reflete a resposta para cada espaço
 LIST_OF_ANSWERS = [
-    [["___1___","Resposta"],["___2___","Resposta"],["___3___","Resposta"],
-        ["___4___","Resposta"]],
-    [["___1___","Resposta"],["___2___","Resposta"],["___3___","Resposta"],
-        ["___4___","Resposta"]],
-    [["___1___","Resposta"],["___2___","Resposta"],["___3___","Resposta"],
-        ["___3___","Resposta"]]
+    [["___1___","WWW"],["___2___","HTML"],["___3___","imagens"],
+        ["___4___","hyperlinks"]],
+    [["___1___","cliente"],["___2___","Internet"],["___3___","servidor"],
+        ["___4___","navegador"]],
+    [["___1___","CSS"],["___2___","seletor"],["___3___","classe"],
+        ["___4___","identificação"]]
 ]
 
 # Imprime o Banner inicial
@@ -32,7 +38,7 @@ def init(lives):
     return lives,hits
 
 # Retorna o indice de uma frase baseado na dificuldade
-def select_phrase(level):
+def select_phrase_index(level):
     if (level == 'fácil'):
         return 0
     elif (level == 'médio'):
@@ -60,6 +66,10 @@ def check_answer(answer, key, list_of_answer):
             return True
     return False
 
+# substitui a palavra key por answer em phrase
+def replace_answer(answer,key,phrase):
+    return phrase.replace(key,answer)
+
 # Imprime o resultado do jogo baseado na quantidade de acertos
 def result(hits,max_hits):
     if (hits == max_hits):
@@ -71,8 +81,9 @@ def result(hits,max_hits):
 def play_game(lives,phrases,list_of_answers):
     lives,hits = init(LIVES)
     level = raw_input("Selecione o nivel de dificuldade: ")
-    index = select_phrase(level)
-    print phrases[index]
+    index = select_phrase_index(level)
+    phrase = phrases[index]
+    print phrase
     keys = get_replacement_keys(index, list_of_answers)
     max_hits = len(keys)
     while (lives > 0 and hits < max_hits):
@@ -82,7 +93,8 @@ def play_game(lives,phrases,list_of_answers):
             lives -= 1
             print "Tente novamente!"
         else:
-            print phrases[index]
+            phrase = replace_answer(answer,keys[hits],phrase)
+            print phrase
             hits += 1
     print result(hits,max_hits)
 
