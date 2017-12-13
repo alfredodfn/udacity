@@ -35,8 +35,7 @@ data = {
 def banner(level,data):
     print "Você possui " + str(data[level]['lives']) + " tentativa(s)!"
 
-# Seleciona o nivel das perguntas a serem feitas ao usuario de acordo com
-# a lista de niveis permitidos level_list
+# Seleciona o nivel das perguntas a serem feitas ao usuario
 def select_level(data):
     while True:
         level = raw_input("Selecione o nivel de dificuldade (facil, medio ou dificil): ")
@@ -44,7 +43,8 @@ def select_level(data):
             return level
         print "Nível \"" + level + "\" não suportado! Tente novamente."
 
-# Inicializa o jogo com as vidas (tentativas máximas) e os numeros de acertos
+# Inicializa o jogo com as vidas (tentativas máximas), os numeros de acertos
+# o nivel, o numero maximo de acertos necessarios e a frase escolhida
 def init_game(data):
     level = select_level(data)
     banner(level,data)
