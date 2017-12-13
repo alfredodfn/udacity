@@ -2,7 +2,7 @@
 
 LIVES = 5
 
-LEVEL_LIST = ['fácil','médio','difícil']
+LEVEL_LIST = ['facil','medio','dificil']
 
 # PHRASES e LIST_OF_ANSWERS sao relacionadas pelo indice da lista.
 # Ou seja, LIST_OF_ANSWERS[0] contém as respostas de PHRASES[0]
@@ -31,14 +31,24 @@ LIST_OF_ANSWERS = [
 # Imprime o Banner inicial
 def banner(lives):
     print "Você possui " + str(lives) + " tentativa(s)!"
-    print "Informe o nivel de dificuldade. Pode ser: fácil, médio ou difícil."
+    print "Informe o nivel de dificuldade. Pode ser: facil, medio ou dificil."
+
+# Seleciona o nivel das perguntas a serem feitas ao usuario de acordo com
+# a lista de niveis permitidos level_list
+def select_level(level_list):
+    while True:
+        level = raw_input("Selecione o nivel de dificuldade: ")
+        if level in level_list:
+            return level
+        print "Nível \"" + level + "\" não suportado! Tente novamente."
 
 # Inicializa o jogo com as vidas (tentativas máximas) e os numeros de acertos
-def init(lives):
+def init_game(lives,level_list):
     banner(lives)
     lives = lives
     hits = 0
-    return lives,hits
+    level = select_level(level_list)
+    return lives,hits,level
 
 # Retorna o indice de uma frase baseado na dificuldade
 def select_phrase_index(level, level_list):
@@ -48,10 +58,10 @@ def select_phrase_index(level, level_list):
 # encontradas para uma determinada frase
 def get_replacement_keys(index, list_of_answers):
     keys = []
-    i = 0
-    while ( i < len(list_of_answers[index])):
-        keys.append(list_of_answers[index][i][0])
-        i += 1
+    kay_answer_index = 0
+    while ( kay_answer_index < len(list_of_answers[index])):
+        keys.append(list_of_answers[index][kay_answer_index][0])
+        kay_answer_index += 1
     return keys
 
 # Verifica se a resposta esta presente na lista de respostas de uma
@@ -75,24 +85,20 @@ def result(hits,max_hits):
 
 # Jogo em si, captura as informações do usuário e implementa as regras
 def play_game(lives,phrases,list_of_answers,level_list):
-    lives,hits = init(LIVES)
-    level = ""
-    while level not in level_list:
-        level = raw_input("Selecione o nivel de dificuldade: ")
+    lives,hits,level = init_game(LIVES,level_list)
     index = select_phrase_index(level,level_list)
     phrase = phrases[index]
-    print phrase
     keys = get_replacement_keys(index, list_of_answers)
     max_hits = len(keys)
     while (lives > 0 and hits < max_hits):
+        print phrase
         answer = raw_input("Qual a palavra que substitui "+ keys[hits] + "? " +
         "(tentativas restantes = "+str(lives)+") ")
         if (check_answer(answer, keys[hits], list_of_answers[index]) == False):
             lives -= 1
-            print "Tente novamente!"
+            print "\nTente novamente!\n"
         else:
             phrase = replace_answer(answer,keys[hits],phrase)
-            print phrase
             hits += 1
     print result(hits,max_hits)
 
