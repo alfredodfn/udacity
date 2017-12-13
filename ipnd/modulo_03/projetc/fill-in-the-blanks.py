@@ -31,11 +31,11 @@ data = {
     }
 }
 
-# Imprime o Banner inicial
+"""Imprime o Banner inicial"""
 def banner(level,data):
     print "Você possui " + str(data[level]['lives']) + " tentativa(s)!"
 
-# Seleciona o nivel das perguntas a serem feitas ao usuario
+"""Seleciona o nivel das perguntas a serem feitas ao usuario"""
 def select_level(data):
     while True:
         level = raw_input("Selecione o nivel de dificuldade (facil, medio ou dificil): ")
@@ -43,8 +43,8 @@ def select_level(data):
             return level
         print "Nível \"" + level + "\" não suportado! Tente novamente."
 
-# Inicializa o jogo com as vidas (tentativas máximas), os numeros de acertos
-# o nivel, o numero maximo de acertos necessarios e a frase escolhida
+"""Inicializa o jogo com as vidas (tentativas máximas), os numeros de acertos
+o nivel, o numero maximo de acertos necessarios e a frase escolhida"""
 def init_game(data):
     level = select_level(data)
     banner(level,data)
@@ -54,14 +54,14 @@ def init_game(data):
     phrase = data[level]['phrase']
     return lives,hits,max_hits,level,phrase
 
-# Imprime o resultado do jogo baseado na quantidade de acertos
+"""Imprime o resultado do jogo dada a quantidade de acertos"""
 def result(hits,max_hits):
     if (hits == max_hits):
         return "Você venceu!"
     else:
         return "Você não conseguiu acertar todos os desafios! Revise o conteúdo!"
 
-# Jogo em si, captura as informações do usuário e implementa as regras
+""" Implementa as regras e o fluxo do jogo """
 def play_game(data):
     lives,hits,max_hits,level,phrase = init_game(data)
     while (lives > 0 and hits < max_hits):
